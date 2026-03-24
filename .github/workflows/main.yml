@@ -1,0 +1,27 @@
+name: Build My EXE
+on: [push] # This means "run every time I upload a file"
+
+jobs:
+  build:
+    runs-on: windows-latest # Tells GitHub to use a Windows computer
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install python-docx pyinstaller
+
+      - name: Create EXE
+        run: pyinstaller --onefile merge_tool.py # REPLACE WITH YOUR FILE NAME
+
+      - name: Upload EXE
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-windows-app
+          path: dist/*.exe
